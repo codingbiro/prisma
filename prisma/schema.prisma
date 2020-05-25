@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://prismatest:prismatest@localhost:5432/prismatest?schema=public"
+}
+
+model movie {
+  id     String   @default(uuid()) @id
+  length Int?
+  title  String
+  review review[]
+}
+
+model review {
+  id       String  @default(uuid()) @id
+  movie_id String
+  rating   Int
+  review   String?
+  user_id  String
+  movie    movie   @relation(fields: [movie_id], references: [id])
+  user     user    @relation(fields: [user_id], references: [id])
+}
+
+model user {
+  age      Int?
+  email    String   @unique
+  id       String   @default(uuid()) @id
+  name     String
+  password String
+  review   review[]
+}
